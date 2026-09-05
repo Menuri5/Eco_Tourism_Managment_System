@@ -8,7 +8,9 @@ import { HiOutlineUser, HiOutlineEnvelope, HiOutlinePencil, HiOutlinePhone, HiOu
 export default function ProfilePage() {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  
+
+
+  // Form state holding editable user profile information with fallback defaults
   const [formData, setFormData] = useState({
     name: user?.name || '',
     username: user?.username || 'traveler_99',
@@ -27,6 +29,10 @@ export default function ProfilePage() {
 
   const availablePreferences = ['Wildlife', 'Nature', 'Beaches', 'Cultural', 'Adventure', 'Relaxation'];
 
+  /**
+   * Adds or removes a selected preference item from the formData state
+   */
+
   const handlePreferenceToggle = (pref) => {
     setFormData(prev => ({
       ...prev,
@@ -36,10 +42,18 @@ export default function ProfilePage() {
     }));
   };
 
+  /**
+   * Persists updated profile info (mock save) and exits edit mode
+   */
+
   const handleSave = () => {
     // In real app, call API to save profile details and password
     setIsEditing(false);
   };
+
+  /**
+   * Translates internal role keys into friendly UI labels
+   */
 
   const getAccountRoleLabel = () => {
     if (user?.role === 'admin') return 'Admin Account';
@@ -49,14 +63,17 @@ export default function ProfilePage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">My Profile</h1>
 
+      {/* Page Title */}
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">My Profile</h1>
+      {/* Main Profile Card Container */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         {/* Header Cover */}
         <div className="h-32 bg-gradient-to-r from-eco-ocean to-eco-forest relative">
           <div className="absolute -bottom-12 left-8">
             <div className="relative">
               <img src={user?.avatar || 'https://via.placeholder.com/150'} alt="Profile" className="w-24 h-24 rounded-full border-4 border-white object-cover bg-white" />
+             {/* Avatar edit action badge visible only in edit mode */}
               {isEditing && (
                 <button className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md text-gray-600 hover:text-eco-ocean border border-gray-200">
                   <HiOutlinePencil size={14} />
@@ -64,6 +81,8 @@ export default function ProfilePage() {
               )}
             </div>
           </div>
+
+          {/* Edit Profile trigger button shown only when in view mode */}
           {!isEditing && (
             <button 
               onClick={() => setIsEditing(true)}
@@ -74,8 +93,10 @@ export default function ProfilePage() {
           )}
         </div>
 
+          {/* Profile Card Body */}
         <div className="pt-16 p-8">
           {isEditing ? (
+            /*Edit form mode*/
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -100,6 +121,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
+              {/* Bio Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
                 <textarea value={formData.bio} onChange={e => setFormData({...formData, bio: e.target.value})} rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eco-ocean focus:outline-none"></textarea>
@@ -139,6 +161,7 @@ export default function ProfilePage() {
                 </div>
               )}
 
+              {/* Form Action Controls: Cancel and Save */}
               <div className="flex justify-end space-x-3 pt-6 border-t border-gray-100">
                 <button onClick={() => setIsEditing(false)} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">Cancel</button>
                 <button onClick={handleSave} className="px-6 py-2 bg-eco-ocean text-white rounded-lg font-medium hover:bg-cyan-800">Save Changes</button>
@@ -146,11 +169,14 @@ export default function ProfilePage() {
             </div>
           ) : (
             <div className="space-y-8">
+              {/* User Bio and Primary Metadata */}
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
                   {formData.name || user?.name || 'Traveler'} 
                   <span className="text-sm font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded">@{formData.username}</span>
                 </h2>
+
+                {/* Contact and Identification Bar */}
                 <div className="flex flex-wrap items-center text-gray-500 mt-2 gap-y-2 gap-x-5 text-sm">
                   <span className="flex items-center"><HiOutlineUser className="mr-1.5 h-4 w-4" /> {getAccountRoleLabel()}</span>
                   <span className="flex items-center"><HiOutlineEnvelope className="mr-1.5 h-4 w-4" /> {formData.email || user?.email}</span>
@@ -163,6 +189,7 @@ export default function ProfilePage() {
               {/* Tourist Only Stats & Preferences */}
               {user?.role === 'tourist' && (
                 <>
+                {/* Tourist Activity Metric Counters */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-gray-100 py-6">
                     <div className="text-center">
                       <p className="text-3xl font-bold text-eco-ocean">12</p>
@@ -178,6 +205,8 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
+
+                  {/* Configured Travel Preferences Badges */}
                   <div>
                     <h3 className="font-bold text-gray-800 mb-3">Travel Preferences</h3>
                     <div className="flex flex-wrap gap-2">
