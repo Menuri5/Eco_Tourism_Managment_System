@@ -6,15 +6,18 @@ import { useGuides } from '../../context/GlobalDataContext';
 import { HiStar, HiOutlineChatBubbleLeftRight, HiOutlineShieldCheck } from 'react-icons/hi2';
 
 export default function GuidesPage() {
+  // 1. Fetch guides from global context and initialize filter state for specializations
   const { guides } = useGuides();
   const [filter, setFilter] = useState('all');
 
+  // 2. Filter guides based on selected specialization keyword
   const filteredGuides = filter === 'all' 
     ? guides 
     : guides.filter(g => g.specialization.toLowerCase().includes(filter.toLowerCase()));
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
+      {/* Header section with page title, description, and filter dropdown */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
         <div className="max-w-2xl">
           <h1 className="text-3xl font-bold text-gray-800">Local Eco-Guides</h1>
@@ -32,14 +35,17 @@ export default function GuidesPage() {
         </select>
       </div>
 
+      {/* Information banner about certified eco-partners */}
       <div className="bg-cyan-50 border border-cyan-100 rounded-xl p-4 flex items-start">
         <HiOutlineShieldCheck className="text-eco-ocean flex-shrink-0 text-2xl mr-3" />
         <p className="text-sm text-cyan-800">All guides listed here are officially certified EcoLanka partners, trained in sustainable tourism practices and local conservation protocols.</p>
       </div>
 
+      {/* Grid of guide cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredGuides.map(guide => (
           <div key={guide.id} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow">
+            {/* Guide profile header: Avatar, name, specialization, and rating */}
             <div className="p-6 border-b border-gray-100 flex items-center space-x-4">
               <img src={guide.avatar} alt={guide.name} className="w-20 h-20 rounded-full object-cover border-4 border-gray-50" />
               <div>
@@ -53,6 +59,7 @@ export default function GuidesPage() {
               </div>
             </div>
             
+            {/* Guide details: Bio, spoken languages, and years of experience */}
             <div className="p-6 flex-grow flex flex-col">
               <p className="text-sm text-gray-600 mb-4 line-clamp-3">{guide.bio}</p>
               
@@ -71,6 +78,7 @@ export default function GuidesPage() {
                 </div>
               </div>
               
+              {/* Footer section: Pricing per day and contact action button */}
               <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                 <div>
                   <p className="text-2xl font-bold text-gray-800">${guide.pricePerDay}</p>
