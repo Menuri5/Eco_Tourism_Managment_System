@@ -1,33 +1,44 @@
+/**
+ * ManageCategoriesPage - Admin page for viewing, adding, editing, and deleting destination categories.
+ */
 import React, { useState } from 'react';
 import { useCategories } from '../../context/GlobalDataContext';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiPlus, HiXMark } from 'react-icons/hi2';
 
 export default function ManageCategoriesPage() {
+  // 1. Fetch categories list and CRUD functions from global context
   const { categories, addCategory, updateCategory, deleteCategory } = useCategories();
+  
+  // 2. State management for Add/Edit Modal (visibility, current item ID, and form fields)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ name: '', slug: '', description: '', icon: '' });
   
+  // 3. State management for Delete Confirmation Modal (visibility and item ID to delete)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
+  // 4. Opens modal for creating a new category with blank fields
   const openAddModal = () => {
     setEditingId(null);
     setFormData({ name: '', slug: '', description: '', icon: '' });
     setIsModalOpen(true);
   };
 
+  // 5. Opens modal for editing an existing category pre-populated with its data
   const openEditModal = (cat) => {
     setEditingId(cat.id);
     setFormData({ name: cat.name, slug: cat.slug, description: cat.description, icon: cat.icon });
     setIsModalOpen(true);
   };
 
+  // 6. Opens delete confirmation dialog for a specific category ID
   const openDeleteModal = (id) => {
     setDeletingId(id);
     setIsDeleteModalOpen(true);
   };
 
+  // 7. Handles form submission: updates if editing, creates if adding new
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingId) {
@@ -38,6 +49,7 @@ export default function ManageCategoriesPage() {
     setIsModalOpen(false);
   };
 
+  // 8. Confirms and executes category deletion
   const confirmDelete = () => {
     if (deletingId) {
       deleteCategory(deletingId);
@@ -47,6 +59,7 @@ export default function ManageCategoriesPage() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
+      {/* Page Header with Title and Add Category Button */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Manage Categories</h1>
         <button onClick={openAddModal} className="bg-eco-ocean hover:bg-cyan-800 text-white rounded-lg px-4 py-2 font-medium flex items-center">
@@ -54,6 +67,7 @@ export default function ManageCategoriesPage() {
         </button>
       </div>
 
+      {/* Categories Table View Container */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -71,6 +85,7 @@ export default function ManageCategoriesPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{cat.icon || '—'}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{cat.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{cat.slug}</td>
+                  {/* Action buttons to edit or delete category */}
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button onClick={() => openEditModal(cat)} className="text-eco-ocean hover:text-cyan-900 mr-4">
                       <HiOutlinePencilSquare className="inline h-5 w-5" />
@@ -81,6 +96,7 @@ export default function ManageCategoriesPage() {
                   </td>
                 </tr>
               ))}
+              {/* Fallback row if category list is empty */}
               {categories.length === 0 && (
                 <tr>
                   <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No categories found.</td>
@@ -91,7 +107,7 @@ export default function ManageCategoriesPage() {
         </div>
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Add/Edit Category Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -106,6 +122,7 @@ export default function ManageCategoriesPage() {
                     <HiXMark className="h-6 w-6" />
                   </button>
                 </div>
+                {/* Category Form Inputs */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -138,7 +155,7 @@ export default function ManageCategoriesPage() {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Confirmation Dialog Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
