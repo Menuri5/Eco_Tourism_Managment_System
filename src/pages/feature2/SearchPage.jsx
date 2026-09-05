@@ -31,6 +31,7 @@ export default function SearchPage() {
         <div className="bg-white p-5 rounded-xl shadow-md">
           <h3 className="font-bold text-gray-800 mb-4">Filters</h3>
           <div className="space-y-4">
+            {/* Price Range Slider Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
               <input type="range" className="w-full accent-eco-ocean" />
@@ -39,6 +40,8 @@ export default function SearchPage() {
                 <span>$500+</span>
               </div>
             </div>
+
+            {/* Minimum Star Rating Checkboxes Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
               <div className="space-y-2">
@@ -64,9 +67,11 @@ export default function SearchPage() {
             placeholder="Search by destination, activity, or keyword..."
             className="w-full pl-12 pr-4 py-3 bg-white border-0 shadow-md rounded-xl focus:ring-2 focus:ring-eco-ocean text-lg"
           />
+          {/* Search Icon Decorator */}
           <HiOutlineMagnifyingGlass className="absolute left-4 top-3.5 text-gray-400" size={24} />
         </div>
-
+        
+        {/* Results Counter and Status Message */}
         <p className="text-gray-600 font-medium">
           Showing {results.length} results {query ? `for "${query}"` : ''}
         </p>
@@ -78,6 +83,8 @@ export default function SearchPage() {
               <div className="p-4">
                 <h3 className="font-bold text-gray-800">{dest.name}</h3>
                 <p className="text-sm text-gray-500">{dest.location}</p>
+
+                {/* Rating and Price Footer */}
                 <div className="mt-2 flex items-center justify-between">
                   <div className="flex items-center text-sm">
                     <HiStar className="text-amber-400 mr-1" />
@@ -89,6 +96,8 @@ export default function SearchPage() {
             </Link>
           ))}
         </div>
+
+        {/* Empty State: Displayed when no matching destinations are found */}
         {results.length === 0 && (
           <div className="bg-white p-8 rounded-xl shadow-md text-center">
             <p className="text-gray-500">No results found for your search.</p>
