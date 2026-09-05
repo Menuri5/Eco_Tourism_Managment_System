@@ -22,6 +22,7 @@ export default function RecommendationsPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
+      {/* Hero Banner: Highlights personalization based on user preferences */}
       <div className="bg-gradient-to-r from-eco-ocean to-cyan-600 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
         <div className="relative z-10">
           <h1 className="text-3xl font-bold flex items-center"><HiOutlineSparkles className="mr-3" /> Recommended for You</h1>
@@ -30,19 +31,28 @@ export default function RecommendationsPage() {
         {/* Decorative background circle */}
         <div className="absolute top-[-50%] right-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
       </div>
-
+        {/* Recommendations Grid*/
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommended.map(dest => (
           <Link key={dest.id} to={`/destinations/${dest.id}`} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden group">
+            
+            {/* Card Thumbnail Container */}
             <div className="relative h-48 overflow-hidden">
+
+              {/* Cover image with zoom-in scale effect on card hover */}
               <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              {/* Category pill badge positioned over the top right corner */}
               <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-eco-ocean">
                 {dest.category}
               </div>
             </div>
+
+            {/* Destination Metadata Body */}
             <div className="p-4">
               <h3 className="font-bold text-gray-800 text-lg mb-1">{dest.name}</h3>
               <p className="text-sm text-gray-500 mb-3">{dest.location}</p>
+
+              {/* Footer: User star rating and starting price display */}
               <div className="flex justify-between items-center mt-4">
                 <span className="flex items-center text-sm font-medium"><HiStar className="text-amber-500 mr-1" /> {dest.rating}</span>
                 <span className="font-bold text-gray-800">${dest.price}</span>
