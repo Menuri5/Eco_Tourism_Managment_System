@@ -31,14 +31,13 @@ export default function RecommendationsPage() {
         {/* Decorative background circle */}
         <div className="absolute top-[-50%] right-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
       </div>
-        {/* Recommendations Grid*/
+
+      {/* Recommendations Grid: Responsive card layout (1 col mobile, 2 col tablet, 4 col desktop) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {recommended.map(dest => (
           <Link key={dest.id} to={`/destinations/${dest.id}`} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden group">
-            
             {/* Card Thumbnail Container */}
             <div className="relative h-48 overflow-hidden">
-
               {/* Cover image with zoom-in scale effect on card hover */}
               <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
               {/* Category pill badge positioned over the top right corner */}
