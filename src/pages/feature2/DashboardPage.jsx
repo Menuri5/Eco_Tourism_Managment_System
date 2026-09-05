@@ -30,6 +30,7 @@ export default function DashboardPage() {
 
       {/* Quick Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Stat Card 1: Destinations Visited */}
         <div className="bg-white p-6 rounded-xl shadow-md flex items-center space-x-4">
           <div className="bg-cyan-100 p-3 rounded-lg text-eco-ocean"><HiOutlineMap size={24} /></div>
           <div>
@@ -37,6 +38,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-gray-800">12</p>
           </div>
         </div>
+        {/* Stat Card 2: Active Bookings */}
         <div className="bg-white p-6 rounded-xl shadow-md flex items-center space-x-4">
           <div className="bg-green-100 p-3 rounded-lg text-eco-forest"><HiOutlineTicket size={24} /></div>
           <div>
@@ -44,6 +46,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-gray-800">3</p>
           </div>
         </div>
+        {/* Stat Card 3: Favourites */}
         <div className="bg-white p-6 rounded-xl shadow-md flex items-center space-x-4">
           <div className="bg-red-100 p-3 rounded-lg text-red-500"><HiOutlineHeart size={24} /></div>
           <div>
@@ -51,6 +54,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-gray-800">4</p>
           </div>
         </div>
+        {/* Stat Card 4: Reviews Written */}
         <div className="bg-white p-6 rounded-xl shadow-md flex items-center space-x-4">
           <div className="bg-amber-100 p-3 rounded-lg text-amber-500"><HiOutlinePencilSquare size={24} /></div>
           <div>
@@ -66,8 +70,10 @@ export default function DashboardPage() {
           <section>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-800">Active Campaigns — Support Conservation</h2>
+              {/* Navigate to full campaigns list */}
               <Link to="/campaigns" className="text-eco-ocean hover:underline text-sm font-medium">View All</Link>
             </div>
+            {/* Grid displaying the top active campaigns */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {activeCampaigns.map(campaign => (
                 <div key={campaign.id} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
@@ -76,6 +82,7 @@ export default function DashboardPage() {
                     <h3 className="font-bold text-gray-800 mb-2">{campaign.title}</h3>
                     <p className="text-sm text-gray-600 mb-4 line-clamp-2">{campaign.description}</p>
                     <div className="mt-auto flex justify-between items-center">
+                      {/* Donation progress indicator */}
                       <span className="text-xs font-semibold text-eco-forest">${campaign.raised} / ${campaign.goal}</span>
                       <Link to={`/campaigns/${campaign.id}`} className="bg-eco-ocean hover:bg-cyan-800 text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Donate</Link>
                     </div>
@@ -91,11 +98,13 @@ export default function DashboardPage() {
               <h2 className="text-2xl font-bold text-gray-800">Recommended for You</h2>
               <Link to="/recommendations" className="text-eco-ocean hover:underline text-sm font-medium">See More</Link>
             </div>
+            {/* Grid displaying featured destinations */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {featuredDestinations.map(dest => (
                 <Link key={dest.id} to={`/destinations/${dest.id}`} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative h-40">
                     <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
+                    {/* Dark gradient overlay applied for readable text contrast on images */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-3 left-3 text-white">
                       <h3 className="font-bold">{dest.name}</h3>
@@ -113,6 +122,7 @@ export default function DashboardPage() {
           <section className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Weather Forecast</h2>
             <div className="space-y-4">
+              {/* Weather item: Colombo */}
               <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
                 <div className="flex items-center space-x-3">
                   <HiOutlineSun className="text-amber-500" size={24} />
@@ -123,6 +133,7 @@ export default function DashboardPage() {
                 </div>
                 <span className="font-bold text-gray-800">31°C</span>
               </div>
+              {/* Weather item: Ella */}
               <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
                 <div className="flex items-center space-x-3">
                   <HiOutlineCloud className="text-gray-400" size={24} />
@@ -132,6 +143,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <span className="font-bold text-gray-800">22°C</span>
+                {/* Weather item: Galle */}
               </div>
               <div className="flex items-center justify-between bg-blue-50 p-3 rounded-lg border border-blue-100">
                 <div className="flex items-center space-x-3">
@@ -166,16 +178,19 @@ export default function DashboardPage() {
           <section className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
             <ul className="space-y-3 relative before:absolute before:inset-y-0 before:left-2 before:w-0.5 before:bg-gray-200">
+              {/* Timeline Item 1 */}
               <li className="relative pl-6">
                 <div className="absolute left-1 top-1.5 w-2 h-2 rounded-full bg-eco-ocean"></div>
                 <p className="text-sm text-gray-800">Reviewed <strong>Yala National Park</strong></p>
                 <p className="text-xs text-gray-500">2 days ago</p>
               </li>
+              {/* Timeline Item 2 */}
               <li className="relative pl-6">
                 <div className="absolute left-1 top-1.5 w-2 h-2 rounded-full bg-eco-ocean"></div>
                 <p className="text-sm text-gray-800">Donated to <strong>Save the Elephants</strong></p>
                 <p className="text-xs text-gray-500">1 week ago</p>
               </li>
+              {/* Timeline Item 3 */}
               <li className="relative pl-6">
                 <div className="absolute left-1 top-1.5 w-2 h-2 rounded-full bg-eco-ocean"></div>
                 <p className="text-sm text-gray-800">Visited <strong>Sigiriya Rock Fortress</strong></p>
