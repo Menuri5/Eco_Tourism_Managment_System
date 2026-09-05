@@ -8,14 +8,17 @@ import { HiOutlineMagnifyingGlass, HiStar } from 'react-icons/hi2';
 import DestinationCard from '../../components/DestinationCard';
 
 export default function DestinationsPage() {
+  // 1. Fetch destinations and categories from global context data
   const { destinations } = useDestinations();
   const { categories } = useCategories();
   
+  // 2. Component state for search query, category filtering, sorting, and pagination
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('rating');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // 3. Filter destinations based on category and search query, then sort them accordingly
   const filteredDestinations = destinations
     .filter(dest => (categoryFilter === 'all' || dest.categoryId === categoryFilter))
     .filter(dest => dest.name.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -26,6 +29,7 @@ export default function DestinationsPage() {
       return 0;
     });
 
+  // 4. Pagination configuration and sliced data for the current page
   const ITEMS_PER_PAGE = 9;
   const paginatedDestinations = filteredDestinations.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
   const totalPages = Math.ceil(filteredDestinations.length / ITEMS_PER_PAGE);
@@ -34,8 +38,9 @@ export default function DestinationsPage() {
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold text-gray-800">Explore Eco-Destinations</h1>
 
-      {/* Controls */}
+      {/* Control panel: Search input and filter/sort dropdowns */}
       <div className="bg-white p-4 rounded-xl shadow-md flex flex-col md:flex-row gap-4 items-center justify-between">
+        {/* Search Input */}
         <div className="relative w-full md:w-96">
           <input
             type="text"
@@ -46,6 +51,8 @@ export default function DestinationsPage() {
           />
           <HiOutlineMagnifyingGlass className="absolute left-3 top-2.5 text-gray-400" size={20} />
         </div>
+        
+        {/* Filter and Sort Dropdowns */}
         <div className="flex w-full md:w-auto gap-4">
           <select
             value={categoryFilter}
@@ -69,7 +76,7 @@ export default function DestinationsPage() {
         </div>
       </div>
 
-      {/* Grid */}
+      {/* Destination Grid or Empty Fallback */}
       {paginatedDestinations.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedDestinations.map(dest => (
@@ -82,7 +89,7 @@ export default function DestinationsPage() {
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center space-x-2 mt-8">
           <button 
