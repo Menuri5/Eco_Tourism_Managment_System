@@ -1,28 +1,38 @@
+/**
+ * ManageGuidesPage - Admin component for adding, editing, and deleting certified eco-guides.
+ */
 import React, { useState } from 'react';
 import { useGuides } from '../../context/GlobalDataContext';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiPlus, HiXMark } from 'react-icons/hi2';
 import ImagePicker from '../../components/admin/ImagePicker';
 
 export default function ManageGuidesPage() {
+  // 1. Fetch guide management context and functions
   const { guides, addGuide, updateGuide, deleteGuide } = useGuides();
+  
+  // 2. State configuration for managing the add/edit modal and selected guide ID
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
+  // 3. Initial state blueprint for guide form inputs
   const initialFormState = { 
     name: '', specialization: '', location: '', experience: 0, 
     pricePerDay: 0, languages: '', bio: '', avatar: '' 
   };
   const [formData, setFormData] = useState(initialFormState);
   
+  // 4. State management for the delete confirmation modal dialog
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
+  // 5. Opens the modal to create a new guide with default empty fields
   const openAddModal = () => {
     setEditingId(null);
     setFormData(initialFormState);
     setIsModalOpen(true);
   };
 
+  // 6. Opens the modal to edit an existing guide, converting arrays to comma-separated strings
   const openEditModal = (guide) => {
     setEditingId(guide.id);
     setFormData({ 
@@ -32,11 +42,13 @@ export default function ManageGuidesPage() {
     setIsModalOpen(true);
   };
 
+  // 7. Triggers the delete confirmation prompt for a specified guide ID
   const openDeleteModal = (id) => {
     setDeletingId(id);
     setIsDeleteModalOpen(true);
   };
 
+  // 8. Handles form submission: normalizes languages into an array and saves via context
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = {
@@ -48,6 +60,7 @@ export default function ManageGuidesPage() {
     setIsModalOpen(false);
   };
 
+  // 9. Confirms and executes the guide deletion action
   const confirmDelete = () => {
     if (deletingId) deleteGuide(deletingId);
     setIsDeleteModalOpen(false);
@@ -55,6 +68,7 @@ export default function ManageGuidesPage() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
+      {/* Page Header and Add Guide Button */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Manage Guides</h1>
         <button onClick={openAddModal} className="bg-eco-ocean hover:bg-cyan-800 text-white rounded-lg px-4 py-2 font-medium flex items-center">
@@ -62,6 +76,7 @@ export default function ManageGuidesPage() {
         </button>
       </div>
 
+      {/* Guides Data Table Container */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -87,6 +102,7 @@ export default function ManageGuidesPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{guide.specialization}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{guide.location}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-eco-ocean">${guide.pricePerDay}</td>
+                  {/* Action buttons to edit or delete guide */}
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button onClick={() => openEditModal(guide)} className="text-eco-ocean hover:text-cyan-900 mr-4">
                       <HiOutlinePencilSquare className="inline h-5 w-5" />
@@ -102,6 +118,7 @@ export default function ManageGuidesPage() {
         </div>
       </div>
 
+      {/* Add / Edit Guide Modal Dialog */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto pt-10">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -115,10 +132,12 @@ export default function ManageGuidesPage() {
                   <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-500"><HiXMark className="h-6 w-6" /></button>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4 grid grid-cols-2 gap-4">
+                  {/* Guide Name */}
                   <div className="col-span-2 sm:col-span-1">
                     <label className="block text-sm font-medium text-gray-700">Name</label>
                     <input type="text" required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-eco-ocean focus:border-eco-ocean sm:text-sm" />
                   </div>
+                  {/* Guide Avatar Image Picker */}
                   <div className="col-span-2 sm:col-span-1">
                     <ImagePicker 
                       label="Guide Photo" 
@@ -126,30 +145,37 @@ export default function ManageGuidesPage() {
                       onChange={(val) => setFormData({...formData, avatar: val})} 
                     />
                   </div>
+                  {/* Specialization Field */}
                   <div className="col-span-2 sm:col-span-1">
                     <label className="block text-sm font-medium text-gray-700">Specialization</label>
                     <input type="text" required value={formData.specialization} onChange={(e) => setFormData({...formData, specialization: e.target.value})} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-eco-ocean focus:border-eco-ocean sm:text-sm" />
                   </div>
+                  {/* Location Field */}
                   <div className="col-span-2 sm:col-span-1">
                     <label className="block text-sm font-medium text-gray-700">Location</label>
                     <input type="text" required value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-eco-ocean focus:border-eco-ocean sm:text-sm" />
                   </div>
+                  {/* Experience Years Field */}
                   <div className="col-span-2 sm:col-span-1">
                     <label className="block text-sm font-medium text-gray-700">Experience (Years)</label>
                     <input type="number" required value={formData.experience} onChange={(e) => setFormData({...formData, experience: Number(e.target.value)})} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-eco-ocean focus:border-eco-ocean sm:text-sm" />
                   </div>
+                  {/* Price Per Day Field */}
                   <div className="col-span-2 sm:col-span-1">
                     <label className="block text-sm font-medium text-gray-700">Price Per Day ($)</label>
                     <input type="number" required value={formData.pricePerDay} onChange={(e) => setFormData({...formData, pricePerDay: Number(e.target.value)})} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-eco-ocean focus:border-eco-ocean sm:text-sm" />
                   </div>
+                  {/* Languages Input */}
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700">Languages (comma separated)</label>
                     <input type="text" value={formData.languages} onChange={(e) => setFormData({...formData, languages: e.target.value})} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-eco-ocean focus:border-eco-ocean sm:text-sm" placeholder="English, Sinhala" />
                   </div>
+                  {/* Bio Textarea */}
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700">Bio</label>
                     <textarea rows="3" required value={formData.bio} onChange={(e) => setFormData({...formData, bio: e.target.value})} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-eco-ocean focus:border-eco-ocean sm:text-sm"></textarea>
                   </div>
+                  {/* Form Action Buttons */}
                   <div className="col-span-2 sm:flex sm:flex-row-reverse mt-4">
                     <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-eco-ocean text-base font-medium text-white hover:bg-cyan-800 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
                       {editingId ? 'Save Changes' : 'Add Guide'}
@@ -165,7 +191,7 @@ export default function ManageGuidesPage() {
         </div>
       )}
 
-      {/* Delete Modal */}
+      {/* Delete Confirmation Modal Dialog */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
