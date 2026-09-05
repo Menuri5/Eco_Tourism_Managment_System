@@ -8,24 +8,26 @@ import { reviews as initialReviews } from '../../data/reviews';
 import { HiOutlineMapPin, HiStar, HiOutlineCheckCircle, HiOutlineShieldCheck, HiOutlineGlobeAlt, HiCheckCircle, HiOutlinePhone, HiOutlineEnvelope, HiOutlineUser } from 'react-icons/hi2';
 
 export default function DestinationDetailPage() {
+  // 1. Get destination ID from URL params and fetch data contexts
   const { id } = useParams();
   const { destinations } = useDestinations();
   const { guides } = useGuides();
   const dest = destinations.find(d => d.id === parseInt(id));
 
-  // Local state for reviews (start with existing + allow adding new ones)
+  // 2. Local state for reviews and review submission handling
   const [reviews, setReviews] = useState(
     initialReviews.filter(r => r.destinationId === parseInt(id))
   );
   const [newReview, setNewReview] = useState({ rating: 5, text: '', title: '' });
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
-  // Calculate average rating from reviews
+  // 3. Calculate average rating dynamically using useMemo for performance optimization
   const avgRating = useMemo(() => {
     if (!reviews.length) return dest?.rating || 0;
     return (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1);
   }, [reviews, dest]);
 
+  // 4. Fallback view if destination is not found
   if (!dest) {
     return <div className="p-12 text-center">
       <h2 className="text-2xl font-bold text-gray-800">Destination not found</h2>
@@ -33,7 +35,7 @@ export default function DestinationDetailPage() {
     </div>;
   }
 
-  // Find guides that match the destination's location or name
+  // 5. Match relevant local guides based on destination name or location keywords
   const relatedGuides = useMemo(() => {
     const destNameWords = dest.name.toLowerCase().split(' ');
     const destLocationWords = dest.location.toLowerCase().split(/[,\s]+/);
@@ -44,13 +46,14 @@ export default function DestinationDetailPage() {
              destLocationWords.some(w => w.length > 3 && gLoc.includes(w));
     });
     
-    // Fallback to top rated if no exact match
+    // Fallback to top-rated guides if no specific match is found
     return matched.length > 0 ? matched.slice(0, 3) : guides.sort((a,b) => b.rating - a.rating).slice(0, 3);
   }, [dest]);
 
+  // 6. Find similar destinations under the same category
   const relatedDestinations = destinations.filter(d => d.categoryId === dest.categoryId && d.id !== dest.id).slice(0, 3);
 
-  // ─── Submit a new review ───
+  // 7. Handler to submit a new user review
   const handleSubmitReview = (e) => {
     e.preventDefault();
     if (!newReview.text.trim() || !newReview.title.trim()) return;
@@ -71,14 +74,14 @@ export default function DestinationDetailPage() {
     setTimeout(() => setReviewSubmitted(false), 3000);
   };
 
-  // Google Maps embed URL from coordinates
+  // 8. Generate Google Maps iframe source URL using coordinates
   const mapSrc = dest.coordinates 
     ? `https://www.google.com/maps?q=${dest.coordinates.lat},${dest.coordinates.lng}&z=14&output=embed`
     : null;
 
   return (
     <div className="pb-12">
-      {/* Hero / Image Gallery */}
+      {/* Hero section: Multi-image layout grid or fallback single image */}
       {dest.images && dest.images.length >= 3 ? (
         <div className="max-w-7xl mx-auto px-6 mt-6 mb-8">
           <div className="text-gray-500 text-sm mb-4">
@@ -91,6 +94,7 @@ export default function DestinationDetailPage() {
                 <HiOutlineMapPin className="mr-2 text-eco-ocean" /> {dest.location}
               </div>
             </div>
+            {/* Rating badge */}
             <div className="bg-gray-50 px-4 py-2 rounded-lg inline-flex items-center border border-gray-200">
               <HiStar className="text-amber-400 mr-2 text-xl" />
               <span className="text-gray-800 font-bold text-xl">{avgRating}</span>
@@ -98,6 +102,7 @@ export default function DestinationDetailPage() {
             </div>
           </div>
           
+          {/* Image gallery grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 h-[40vh] md:h-[60vh] rounded-2xl overflow-hidden shadow-sm">
             <div className="md:col-span-2 relative h-full">
               <img src={dest.images[0] || dest.image} alt={dest.name} className="w-full h-full object-cover hover:brightness-95 transition duration-300" />
@@ -113,6 +118,7 @@ export default function DestinationDetailPage() {
           </div>
         </div>
       ) : (
+        // Fallback single image hero banner
         <div className="relative h-[60vh] w-full">
           <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
@@ -137,14 +143,17 @@ export default function DestinationDetailPage() {
         </div>
       )}
 
+      {/* Main Content & Sidebar Layout */}
       <div className="max-w-7xl mx-auto px-6 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column - Main Info */}
+        {/* Left Column - Main Details */}
         <div className="lg:col-span-2 space-y-8">
+          {/* About section */}
           <section className="bg-white p-6 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">About</h2>
             <p className="text-gray-600 leading-relaxed">{dest.description}</p>
           </section>
 
+          {/* Highlights section */}
           <section className="bg-white p-6 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Highlights</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -157,6 +166,7 @@ export default function DestinationDetailPage() {
             </ul>
           </section>
 
+          {/* Activities preview section */}
           <section className="bg-white p-6 rounded-xl shadow-md">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-800">Activities</h2>
@@ -177,7 +187,7 @@ export default function DestinationDetailPage() {
             </div>
           </section>
 
-          {/* ─── Interactive Map ─── */}
+          {/* Interactive Google Map embed section */}
           {mapSrc && (
             <section className="bg-white p-6 rounded-xl shadow-md">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">Location</h2>
@@ -200,7 +210,7 @@ export default function DestinationDetailPage() {
             </section>
           )}
 
-          {/* ─── Reviews Section ─── */}
+          {/* Reviews section with form and review list */}
           <section className="bg-white p-6 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               Reviews ({reviews.length})
@@ -216,7 +226,7 @@ export default function DestinationDetailPage() {
                 </div>
               )}
               <form onSubmit={handleSubmitReview}>
-                {/* Star rating selector */}
+                {/* Interactive star rating picker */}
                 <div className="flex items-center gap-1 mb-3">
                   <span className="text-sm text-gray-600 mr-2">Rating:</span>
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -235,7 +245,7 @@ export default function DestinationDetailPage() {
                   ))}
                   <span className="text-sm text-gray-500 ml-2">{newReview.rating}/5</span>
                 </div>
-                {/* Review title */}
+                {/* Review title input */}
                 <input
                   type="text"
                   value={newReview.title}
@@ -244,7 +254,7 @@ export default function DestinationDetailPage() {
                   required
                   className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-eco-ocean focus:border-eco-ocean"
                 />
-                {/* Review text */}
+                {/* Review message body */}
                 <textarea
                   value={newReview.text}
                   onChange={(e) => setNewReview((prev) => ({ ...prev, text: e.target.value }))}
@@ -262,7 +272,7 @@ export default function DestinationDetailPage() {
               </form>
             </div>
 
-            {/* Existing reviews list */}
+            {/* Render list of reviews */}
             <div className="space-y-6">
               {reviews.length > 0 ? (
                 reviews.map((review) => (
@@ -301,7 +311,7 @@ export default function DestinationDetailPage() {
 
         {/* Right Column - Sidebar Widgets */}
         <div className="space-y-6">
-          {/* Pricing & Contact Widget */}
+          {/* Pricing & Site Manager Contact Widget */}
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 sticky top-4">
             <p className="text-gray-500 text-sm mb-1">Starting from</p>
             <div className="text-3xl font-bold text-gray-800 mb-5">${dest.price} <span className="text-base font-normal text-gray-500">/ person</span></div>
@@ -340,7 +350,7 @@ export default function DestinationDetailPage() {
             </div>
           </div>
 
-          {/* Environmental Data Widget */}
+          {/* Environmental metrics / Eco Impact widget */}
           <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-eco-forest">
             <h3 className="font-bold text-gray-800 mb-4 flex items-center"><HiOutlineGlobeAlt className="mr-2 text-eco-forest" /> Eco Impact</h3>
             {dest.environmentalData && (
@@ -370,7 +380,7 @@ export default function DestinationDetailPage() {
             )}
           </div>
 
-          {/* Local Guides */}
+          {/* Available local guides widget */}
           <div className="bg-white p-6 rounded-xl shadow-md">
             <h3 className="font-bold text-gray-800 mb-4">Local Guides Available</h3>
             <div className="space-y-4">
@@ -389,7 +399,7 @@ export default function DestinationDetailPage() {
         </div>
       </div>
 
-      {/* Related Destinations */}
+      {/* Similar Destinations Section */}
       <div className="max-w-7xl mx-auto px-6 mt-12">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Similar Destinations</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
