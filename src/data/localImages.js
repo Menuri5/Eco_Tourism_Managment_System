@@ -1,0 +1,43 @@
+export const localImages = [
+  "SIGIRIYA123.jpg",
+  "Ninearches.jpg",
+  "gallefort.jpg",
+  "Yala.jpg",
+  "sinharaja.jpg",
+  "hortanplains.jpg",
+  "coral.jpg",
+  "Mirissa.jpg",
+  "udawalawa.jpg",
+  "adamspeak.jpg",
+  "guide1.jpg",
+  "guide2.jpg",
+  "guide3.jpg",
+  "guide4.jpg",
+  "guide5.jpg",
+  "guide6.jpg",
+  "guide7.jpg",
+  "leopard.jpg",
+  "mangrove.jpg",
+  "PIGEON ISLAND .jpg",
+  "coral2.jpg",
+  "elephant.jpg",
+  "title.jpg",
+  "hotel1.jpg",
+  "hotel12.jpg",
+  "hotel2.jpg",
+  "hotel21.jpg",
+  "hotel3.jpg",
+  "hotel31.jpg",
+  "hotel4.jpg",
+  "hotel41.jpg",
+  "elephant2.jpg",
+  "turtle2.jpg",
+  "coral3.jpg",
+  "bird.jpg",
+  "leopard2.jpg",
+  "mangrove2.jpg"
+
+
+
+
+];

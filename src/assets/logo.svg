@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 50">
+  <!-- Leaf icon -->
+  <circle cx="22" cy="25" r="20" fill="#15803D"/>
+  <path d="M22 10 C10 20, 12 38, 22 40 C32 38, 34 20, 22 10Z" fill="#22C55E"/>
+  <path d="M22 12 L22 38" stroke="#15803D" stroke-width="1.5" fill="none"/>
+  <path d="M22 20 L16 16" stroke="#15803D" stroke-width="1" fill="none"/>
+  <path d="M22 26 L28 22" stroke="#15803D" stroke-width="1" fill="none"/>
+  <path d="M22 32 L16 28" stroke="#15803D" stroke-width="1" fill="none"/>
+  <!-- Brand text -->
+  <text x="50" y="22" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0E7490">Eco</text>
+  <text x="82" y="22" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#15803D">Lanka</text>
+  <text x="50" y="38" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="400" fill="#6B7280">Serendib Eco Tourism</text>
+</svg>
