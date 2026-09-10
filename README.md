@@ -1,3 +1,5 @@
+<img width="1254" height="1254" alt="Eco_Lanka logo" src="https://github.com/user-attachments/assets/7766ad51-a505-41f9-8954-8fa14f19588f" />
+
 # Eco Tourism Management System
 
 ## About the Project
@@ -8,6 +10,7 @@ The Eco Tourism Management System is a web-based system designed to promote and 
 
 * Tourist registration and login
 * Explore eco-tourism destinations
+
 * Search and filter destinations
 * View destination details
 * Find and contact tour guides
