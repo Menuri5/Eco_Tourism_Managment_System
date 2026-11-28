@@ -96,4 +96,53 @@ const logout = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
-module.exports = { register, login, logout };
+// Forgot password: reset link එක email එකට යවනවා
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const redirectTo = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password`;
+
+    const { error } = await createAuthClient().auth.resetPasswordForEmail(email, {
+      redirectTo,
+    });
+
+    if (error) {
+      console.log('forgotPassword error:', error.message);
+    }
+
+    // email එක තියෙනවද නැද්ද කියලා හෙළි නොවෙන්න හැමවිටම එකම පිළිතුර
+    return res.status(200).json({
+      message: 'If this email is registered, a password reset link has been sent.',
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+// Reset password: email link එකෙන් ආපු token එකෙන් අලුත් password එක දානවා
+// (verifyToken middleware එක ඉස්සරහින් ධාවනය වෙනවා, req.user ලැබෙනවා)
+const resetPassword = async (req, res) => {
+  const { password } = req.body;
+
+  if (!password || password.length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters' });
+  }
+
+  try {
+    const { error } = await supabase.auth.admin.updateUserById(req.user.id, { password });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.status(200).json({ message: 'Password updated successfully' });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+module.exports = { register, login, logout, forgotPassword, resetPassword };
