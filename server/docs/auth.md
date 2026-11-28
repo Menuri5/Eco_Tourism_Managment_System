@@ -43,7 +43,16 @@ Header: `Authorization: Bearer <access_token>`
 Header: `Authorization: Bearer <access_token>`
 - `200`: `{ "user": { "id", "name", "email", "country", "user_type", "created_at" } }`
 - `401`: missing or invalid token
+### GET `/api/profile`  (logged-in user)
+Header: `Authorization: Bearer <access_token>`
+- `200`: `{ "user": { "id", "name", "email", "country", "user_type", "preferences", "avatar_url", "created_at" } }`
 
+### PUT `/api/profile`  (logged-in user)
+Header: `Authorization: Bearer <access_token>`
+Body (any of): `{ "name": "...", "country": "...", "preferences": ["wildlife"], "avatar_url": "https://..." }`
+- `200`: `{ "message": "Profile updated", "user": {...} }`
+- `400`: no valid fields, empty name, or preferences not an array
+- Role (`user_type`) and email cannot be changed here.
 ### GET `/api/auth/admin-only`  (admin only, test route)
 - `200`: `{ "message": "Welcome, admin!" }`
 - `403`: `{ "error": "Forbidden: insufficient permissions" }`
