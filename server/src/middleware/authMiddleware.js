@@ -1,6 +1,6 @@
 const supabase = require('../config/supabaseClient');
 
-// Token එක verify කරලා req.user set කරනවා
+// ආරක්ෂකයා 1: token එක හරිද බලනවා
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -8,12 +8,17 @@ const verifyToken = async (req, res, next) => {
     return res.status(401).json({ error: 'Access token required' });
   }
 
-  const token = authHeader.split(' ')[1];
+  // "Bearer " කොටස කපලා, අකුරු අතරේ ඇති අමතර spaces/quotes ඉවත් කරනවා
+  const token = authHeader.slice(7).trim().replace(/^"|"$/g, '');
+
+  // DEBUG: token එක හරි හැඩේටද බලන්න
+  
 
   try {
     const { data, error } = await supabase.auth.getUser(token);
-        if (error || !data.user) {
-      console.log('verifyToken error:', error && error.message);
+
+    if (error || !data || !data.user) {
+      // DEBUG: Supabase දුන්න හරි හේතුව
       return res.status(401).json({ error: 'Invalid or expired token' });
     }
 
@@ -34,7 +39,7 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-// Role check: checkRole('admin') හෝ checkRole('admin', 'system_manager')
+// ආරක්ෂකයා 2: role එක බලනවා
 const checkRole = (...allowedRoles) => (req, res, next) => {
   if (!req.user || !allowedRoles.includes(req.user.user_type)) {
     return res.status(403).json({ error: 'Forbidden: insufficient permissions' });
