@@ -33,6 +33,9 @@ const verifyToken = async (req, res, next) => {
     }
 
     req.user = profile;
+        if (profile.is_active === false) {
+      return res.status(403).json({ error: 'Account suspended' });
+    }
     next();
   } catch (err) {
     return res.status(500).json({ error: err.message });

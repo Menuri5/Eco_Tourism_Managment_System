@@ -1,3 +1,4 @@
+const adminRoutes = require('./routes/adminRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const express = require('express');
 const cors = require('cors');
@@ -23,4 +24,5 @@ app.get('/api/test-db', async (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/admin/users', adminRoutes);
 module.exports = app;
